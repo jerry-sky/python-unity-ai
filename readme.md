@@ -12,7 +12,7 @@ This project is an educational assignment for the subject of Selected Programmin
 
 [pipenv-install]: https://github.com/pypa/pipenv#installation
 
-Run
+Whilst inside the `api` directory run
 ```bash
 pipenv sync
 ```
@@ -22,5 +22,5 @@ to install all necessary packages for running the API Python server.
 
 Currently the API server is in testing and rapid development.
 
-Run `./api/main.py` to start the `flusk` web application.\
-*Please note: every time a change is made to the file the server restarts.*
+Run `./main.py` from the `api` directory to start the `flusk` web application.\
+*Please note: every time a change is made to any of these files the server restarts.*
