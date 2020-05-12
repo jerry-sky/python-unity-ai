@@ -22,5 +22,12 @@ to install all necessary packages for running the API Python server.
 
 Currently the API server is in testing and rapid development.
 
+Before running the Python app, (whilst inside the `api` directory) run
+```bash
+pipenv shell
+```
+to enter current project environment. **This will ensure the packages
+installed for this project are made available for the app to run.**
+
 Run `./main.py` from the `api` directory to start the `flusk` web application.\
-*Please note: every time a change is made to any of these files the server restarts.*
+*Please note: every time a change is made to any of these API files the server restarts.*
