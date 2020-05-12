@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <p>Look at the <code>console</code> output</p>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
+        integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" charset="utf-8">
+
+        const socket = io('http://127.0.0.1:5000/test');
+        socket.on('connect', function () {
+            socket.emit('my_event', {
+                data: 'I think I\'m connected'
+            });
+        });
+        socket.on('my_response', (data) => {
+            console.log(data)
+        });
+
+    </script>
+</body>
+
+</html>
