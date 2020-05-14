@@ -586,11 +586,11 @@ PlayerSettings:
   scriptingDefineSymbols: {}
   platformArchitecture: {}
   scriptingBackend:
-    Standalone: 1
+    Standalone: 0
   il2cppCompilerConfiguration:
     Standalone: 2
   managedStrippingLevel:
-    Standalone: 3
+    Standalone: 2
     WebGL: 2
   incrementalIl2cppBuild: {}
   allowUnsafeCode: 0

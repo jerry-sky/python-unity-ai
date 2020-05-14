@@ -2,60 +2,33 @@
 using System.Net;
 using System.Text;
 using UnityEngine;
+using TMPro;
 
 public class ServerCommunication : MonoBehaviour
 {
     [SerializeField] private int port = 5000;
+    [SerializeField] private TextMeshProUGUI display = default;
 
     private string server;
-    private WebSocketClient client;
+
+    private WebSocketTestNamespace testNamespace;
 
     private void Awake()
     {
         server = "http://127.0.0.1:" + port;
-        client = new WebSocketClient(server);
+
+        testNamespace = new WebSocketTestNamespace(server, display);
     }
 
-    private void Update()
+    public void EmitTestMessage()
     {
-        var cqueue = client.ReceiveQueue;
-        string msg;
-        while (cqueue.TryPeek(out msg))
-        {
-            cqueue.TryDequeue(out msg);
-            HandleMessage(msg);
-        }
+        testNamespace.EmitTest();
     }
 
-    private void HandleMessage(string msg)
+    public void EmitTestMessageJSON()
     {
-        Debug.Log("Server: " + msg);
-        var message = JsonUtility.FromJson<MessageModel>(msg);
-        switch (message.method)
-        {
-            case "test":
-                //Lobby.OnConnectedToServer?.Invoke();
-                Debug.Log("Interpreted text: " + message.message);
-                break;
-            case "JsonInMessage":
-                //DoSth(JsonUtility.FromJson<EchoMessageModel>(message.message));
-                break;
-            default:
-                Debug.LogError("Unknown type of method: " + message.method);
-                break;
-        }
+        testNamespace.EmitTestJSON();
     }
-
-    public async void ConnectToServer()
-    {
-        await client.Connect();
-    }
-
-    public void SendSocketMessage(string message)
-    {
-        client.Send(message);
-    }
-
 
     #region HttpRequest
     public string Get(string requestPath)
