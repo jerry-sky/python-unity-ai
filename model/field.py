@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 from entities import Wolf, Rabbit
 from random import randint
+from os import system
 
 class Field:
     def __init__(self, width, height, n_wolves, n_rabbits):
@@ -17,7 +18,7 @@ class Field:
         while i < n_wolves:
             rand = [randint(0, self.width-1), randint(0, self.height-1)]
             if self.sq[rand[0]][rand[1]] is None:
-                w = Wolf(rand[0], rand[1])
+                w = Wolf(self, rand[0], rand[1])
                 self.wolves.append(w)
                 self.sq[rand[0]][rand[1]] = w
                 i += 1
@@ -25,14 +26,46 @@ class Field:
         while i < n_rabbits:
             rand = [randint(0, self.width-1), randint(0, self.height-1)]
             if self.sq[rand[0]][rand[1]] is None:
-                r = Rabbit(rand[0], rand[1])
+                r = Rabbit(self, rand[0], rand[1])
                 self.rabbits.append(r)
                 self.sq[rand[0]][rand[1]] = r
                 i += 1
 
+    def start_entities(self):
+        """ Launch all threads. """
+        for w in self.wolves:
+            w.start()
+        for r in self.rabbits:
+            r.start()
+
+    def notify(self, entity, prev_pos):
+        """ Function called by an entity after a move. """
+        self.update_field(entity, prev_pos)
+        self.print_field()
+
+    def get_valid_moves(self, ent):
+        """ Return a list of valid coordinates around an entity. """
+        return [ (i, j) for i in range(ent.pos[0] - 1, ent.pos[0] + 2)
+                for j in range(ent.pos[1] - 1, ent.pos[1] + 2)
+                if 0 <= i < self.width and 0 <= j < self.height
+                and self.sq[i][j] is None
+        ]
+
+    def update_field(self, entity, prev_pos):
+        self.sq[prev_pos[0]][prev_pos[1]] = None
+        self.sq[entity.pos[0]][entity.pos[1]] = entity
+
+    def print_field(self):
+        """ Show the board in the terminal. """
+        system('clear')
+        f = self
+        for y in range(f.height):
+            row = [ '[W]' if f.sq[x][y] in f.wolves
+                    else '[R]' if f.sq[x][y] in f.rabbits
+                    else '[ ]' for x in range(f.width) ]
+            print(''.join(row))
+
 
 if __name__ == '__main__':
-    f = Field(10, 12, 3, 15)
-    for y in range(f.height):
-        row = [ '[W]' if f.sq[x][y] in f.wolves else '[R]' if f.sq[x][y] in f.rabbits else '[ ]' for x in range(f.width) ]
-        print(''.join(row))
+    f = Field(10, 12, 10, 40)
+    f.start_entities()
