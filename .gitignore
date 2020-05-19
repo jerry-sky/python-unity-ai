@@ -52,3 +52,6 @@ sysinfo.txt
 # End of https://www.gitignore.io/api/unity
 
 node_modules
+
+__pycache__
+
