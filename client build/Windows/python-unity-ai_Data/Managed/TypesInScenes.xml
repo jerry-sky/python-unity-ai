@@ -44,13 +44,14 @@
 	<assembly fullname="Assembly-CSharp">
 		<type fullname="MoveObject" preserve="nothing"/>
 		<type fullname="ServerCommunication" preserve="nothing"/>
-		<type fullname="TestHttpGet" preserve="nothing"/>
+		<type fullname="SimulationNamespaceTest" preserve="nothing"/>
 	</assembly>
 	<assembly fullname="DOTween">
 		<type fullname="DG.Tweening.Core.DOTweenSettings" preserve="nothing"/>
 	</assembly>
 	<assembly fullname="Unity.TextMeshPro">
 		<type fullname="TMPro.TMP_FontAsset" preserve="nothing"/>
+		<type fullname="TMPro.TMP_InputField" preserve="nothing"/>
 		<type fullname="TMPro.TMP_Settings" preserve="nothing"/>
 		<type fullname="TMPro.TMP_SpriteAsset" preserve="nothing"/>
 		<type fullname="TMPro.TMP_StyleSheet" preserve="nothing"/>
@@ -63,5 +64,6 @@
 		<type fullname="UnityEngine.UI.CanvasScaler" preserve="nothing"/>
 		<type fullname="UnityEngine.UI.GraphicRaycaster" preserve="nothing"/>
 		<type fullname="UnityEngine.UI.Image" preserve="nothing"/>
+		<type fullname="UnityEngine.UI.RectMask2D" preserve="nothing"/>
 	</assembly>
 </linker>

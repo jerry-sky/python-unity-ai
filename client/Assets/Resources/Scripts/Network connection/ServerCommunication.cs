@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Text;
 using UnityEngine;
@@ -7,27 +8,15 @@ using TMPro;
 public class ServerCommunication : MonoBehaviour
 {
     [SerializeField] private int port = 5000;
-    [SerializeField] private TextMeshProUGUI display = default;
+    public WebSocketSimulationNamespace simulationNamespace = new WebSocketSimulationNamespace();
 
     private string server;
-
-    private WebSocketTestNamespace testNamespace;
 
     private void Awake()
     {
         server = "http://127.0.0.1:" + port;
 
-        testNamespace = new WebSocketTestNamespace(server, display);
-    }
-
-    public void EmitTestMessage()
-    {
-        testNamespace.EmitTest();
-    }
-
-    public void EmitTestMessageJSON()
-    {
-        testNamespace.EmitTestJSON();
+        simulationNamespace.StartConnection(server);
     }
 
     #region HttpRequest
