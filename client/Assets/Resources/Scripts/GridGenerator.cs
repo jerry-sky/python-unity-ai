@@ -11,14 +11,11 @@ public class GridGenerator : MonoBehaviour
     public int hight = 3;
     public GameObject Node;
 
-    public Material DefaultMaterial;
-    public Material HighlightedMaterial;
     [HideInInspector]
     public Vector3 startPos;
     [HideInInspector]
     public Vector3 currentPos;
 
-    public MultipleTargetCamera MultipleTargetCamera;
     public GameObject[,] gridArray;
     private Renderer[,] GridArrayMaterials;
 
@@ -60,20 +57,15 @@ public class GridGenerator : MonoBehaviour
         return gridArray[x, y];
     }
 
-    public void RestartMaterialAtPosition( int x, int y)
+
+    public void SetColorAtPosition( int x, int y)
+    {
+        GridArrayMaterials[x, y].material.DOColor(Color.green, 0.5f);
+    }
+    public void RestartColorAtPosition( int x, int y)
     {
         GridArrayMaterials[x, y].material.DOColor(Color.gray, 10f);
     }
 
-    public Vector2 SetObjectPosition(Transform gameObject, int x, int y)
-    {
-        x = (x + hight) % hight;
-        y = (y + width) % width;
-        GridArrayMaterials[x, y].material.DOColor(Color.green, 0.5f);
-        var pos = gridArray[x, y].transform.position;
-        pos.y += 1f;
-        gameObject.DOMove(pos, 0.5f);
 
-        return new Vector2(x,y);
-    }
 }

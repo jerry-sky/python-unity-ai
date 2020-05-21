@@ -27,7 +27,7 @@ public class MoveObject : MonoBehaviour
         timer += Time.deltaTime;
         if (timer >= 0.1f)
         {
-            GridGenerator.Instance.RestartMaterialAtPosition((int)currentPos.x,(int)currentPos.y);
+            GridGenerator.Instance.RestartColorAtPosition((int)currentPos.x,(int)currentPos.y);
         }
     }
 
@@ -35,7 +35,7 @@ public class MoveObject : MonoBehaviour
     {
         if (timer >= 0.1f)
         {
-            currentPos = GridGenerator.Instance.SetObjectPosition(transform,Random.Range((int)currentPos.x-1,(int)currentPos.x+2),
+            currentPos = GameManager.gm.SetObjectPosition(transform,Random.Range((int)currentPos.x-1,(int)currentPos.x+2),
                 Random.Range((int) currentPos.y-1,(int)currentPos.y+2));
             timer = 0.0f;
         }
