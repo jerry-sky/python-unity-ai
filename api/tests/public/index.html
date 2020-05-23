@@ -10,14 +10,12 @@
 
     <script type="text/javascript" charset="utf-8">
 
-        const socket = io('http://127.0.0.1:5000/test');
+        const socket = io('http://127.0.0.1:5000/simulation');
         socket.on('connect', function () {
-            socket.emit('my_event', {
-                data: 'I think I\'m connected'
-            });
+            socket.emit('start');
         });
-        socket.on('my_response', (data) => {
-            console.log(data)
+        socket.on('update', (data) => {
+            console.log(data);
         });
 
     </script>
