@@ -10,7 +10,7 @@
 
     <script type="text/javascript" charset="utf-8">
 
-        const socket = io('http://127.0.0.1:5000/simulation');
+        const socket = io('http://127.0.0.1:5000');
         socket.on('connect', function () {
             socket.emit('start', {
                 width: 10,
@@ -19,9 +19,13 @@
                 rabbits_count: 5
             });
         });
-        socket.on('update', (data) => {
+        socket.on('field_update', (data) => {
             console.log(data);
         });
+
+        setInterval(() => {
+            socket.emit('field_update')
+        }, 1000)
 
     </script>
 </body>

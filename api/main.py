@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import flask
 from flask import jsonify
-from flask_socketio import SocketIO, Namespace
+from flask_socketio import SocketIO, Namespace, emit
 
 from threading import Thread
 from time import sleep
@@ -10,14 +10,14 @@ from model.field import Field
 from model.start_simulation_request import start_simulation_request
 
 FIELD = None
-EMITTING_THREAD: Thread = None
 
 # flask setup
 app = flask.Flask(__name__)
 app.config['DEBUG'] = True
 
 # socketio setup
-socketio = SocketIO(app, cors_allowed_origins='*')
+socketio = SocketIO(app, cors_allowed_origins='*',
+                    logger=True, engineio_logger=True)
 
 
 # standard flask routes
@@ -33,81 +33,55 @@ def more_data():
     })
 
 
-class EmittingThread(Thread):
-
-    def __init__(self, to_run):
-        Thread.__init__(self)
-        self.alive = True
-        self.__to_run = to_run
-
-    def run(self):
-        while self.alive:
-            self.__to_run()
-            sleep(1)
+@socketio.on('connect')
+def on_connect():
+    print('CONNECT')
+    global FIELD
+    FIELD = None
 
 
-# socket.io event listeners
-class SimulationNamespace(Namespace):
-
-    def __init__(self, path: str):
-        super().__init__(path)
-
-    def on_connect(self):
-        print('CONNECT')
-        global FIELD, EMITTING_THREAD
-        FIELD = None
-        if EMITTING_THREAD is not None:
-            EMITTING_THREAD.alive = False
-
-    def on_disconnect(self):
-        global FIELD, EMITTING_THREAD
-        FIELD = None
-        if EMITTING_THREAD is not None:
-            EMITTING_THREAD.alive = False
-        print('DISCONNECT')
-
-    def on_start(self, data: start_simulation_request = None):
-        global FIELD, EMITTING_THREAD
-        if data is None:
-            return
-
-        if FIELD is not None:
-            self.emit('DUMBASS')
-            return
-
-        FIELD = Field(data['width'], data['height'],
-                             data['wolves_count'], data['rabbits_count'])
-
-        def listener():
-            f = FIELD
-            w = []
-            for wolf in f.wolves:
-                w.append({
-                    'x': wolf.pos[0],
-                    'y': wolf.pos[1],
-                    'alive': wolf.alive
-                })
-
-            r = []
-            for rabbit in f.rabbits:
-                r.append({
-                    'x': rabbit.pos[0],
-                    'y': rabbit.pos[1],
-                    'alive': rabbit.alive
-                })
-            socketio.emit('field_update', {
-                'rabbits': r,
-                'wolves': w
-            })
-
-        EMITTING_THREAD = EmittingThread(listener)
-
-        EMITTING_THREAD.start()
-
-        FIELD.start_entities()
+@socketio.on('disconnect')
+def on_disconnect():
+    global FIELD
+    FIELD = None
+    print('DISCONNECT')
 
 
-socketio.on_namespace(SimulationNamespace('/simulation'))
+@socketio.on('start')
+def on_start(data: start_simulation_request = None):
+    global FIELD
+    if data is None:
+        return
+
+    FIELD = Field(data['width'], data['height'],
+                  data['wolves_count'], data['rabbits_count'])
+
+    FIELD.start_entities()
+
+
+@socketio.on('field_update')
+def on_field_update(data=None):
+    f = FIELD
+    w = []
+    for wolf in f.wolves:
+        w.append({
+            'x': wolf.pos[0],
+            'y': wolf.pos[1],
+            'alive': wolf.alive
+        })
+
+    r = []
+    for rabbit in f.rabbits:
+        r.append({
+            'x': rabbit.pos[0],
+            'y': rabbit.pos[1],
+            'alive': rabbit.alive
+        })
+    socketio.emit('field_update', {
+        'rabbits': r,
+        'wolves': w
+    })
+
 
 if __name__ == '__main__':
-    socketio.run(app)
+    socketio.run(app, port=5000)
