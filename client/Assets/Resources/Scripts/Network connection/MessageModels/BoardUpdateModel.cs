@@ -4,7 +4,7 @@
 public class BoardUpdateModel
 {
     public EntityModel[] rabbits;
-    public EntityModel[] wolfs;
+    public EntityModel[] wolves;
 
     public string print()
     {
@@ -17,10 +17,10 @@ public class BoardUpdateModel
                 ret += "\n    " + entityModel.alive + ", " + entityModel.x + ", " + entityModel.y;
             }
         }
-        if (!(wolfs is null))
+        if (!(wolves is null))
         {
             ret += "\nWolfs:";
-            foreach (EntityModel entityModel in wolfs)
+            foreach (EntityModel entityModel in wolves)
             {
                 ret += "\n    " + entityModel.alive + ", " + entityModel.x + ", " + entityModel.y;
             }

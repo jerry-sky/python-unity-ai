@@ -39,8 +39,8 @@ public class SimulationNamespaceTest : MonoBehaviour
         {
             width = int.Parse(widthInput.text),
             height = int.Parse(heightInput.text),
-            n_wolves = int.Parse(wolfInput.text),
-            n_rabbits = int.Parse(rabbitInput.text)
+            wolves_count = int.Parse(wolfInput.text),
+            rabbits_count = int.Parse(rabbitInput.text)
         };
         simulationNamespace.StartSimulation(model);
     }

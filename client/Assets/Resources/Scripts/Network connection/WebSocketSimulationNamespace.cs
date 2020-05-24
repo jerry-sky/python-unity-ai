@@ -25,7 +25,7 @@ public class WebSocketSimulationNamespace
     {
         socket = Socket.Connect(serverUrl + "/simulation");
 
-        socket.On("update",
+        socket.On("field_update",
             (string data) =>
             {
                 Debug.Log(data);
@@ -38,10 +38,7 @@ public class WebSocketSimulationNamespace
     public void StartSimulation(SimulationDataModel data)
     {
         string message = JsonUtility.ToJson(data);
-        Debug.Log(message);
-        // Can't send "
-        message = message.Replace('\"', '\'');
-        socket.Emit("start", message);
+        socket.EmitJson("start", message);
     }
 
 }
