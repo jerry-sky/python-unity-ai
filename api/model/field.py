@@ -47,25 +47,6 @@ class Field:
         """ Function called by an entity after a move. """
         self.update_field(entity, prev_pos)
 
-        w = []
-        for wolf in self.wolves:
-            w.append({
-                'x': wolf.pos[0],
-                'y': wolf.pos[1],
-                'alive': wolf.alive
-            })
-
-        r = []
-        for rabbit in self.rabbits:
-            r.append({
-                'x': rabbit.pos[0],
-                'y': rabbit.pos[1],
-                'alive': rabbit.alive
-            })
-
-        for listener in self.__event_listeners:
-            listener(r, w)
-
     def get_valid_moves(self, ent):
         """ Return a list of valid coordinates around an entity. """
         return [(i, j) for i in range(ent.pos[0] - 1, ent.pos[0] + 2)
