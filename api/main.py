@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import flask
 from flask import jsonify
-from flask_socketio import SocketIO, Namespace, emit
+from flask_socketio import SocketIO, Namespace
 
 from model.field import Field
 from model.start_simulation_request import start_simulation_request
@@ -51,7 +51,7 @@ class SimulationNamespace(Namespace):
         self.__simulations.append(f)
 
         def listener(rabbits, wolves):
-            emit('field_update', {
+            socketio.emit('field_update', {
                 'rabbits': rabbits,
                 'wolves': wolves
             })
