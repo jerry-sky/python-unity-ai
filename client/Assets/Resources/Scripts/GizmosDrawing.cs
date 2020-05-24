@@ -13,7 +13,7 @@ public class GizmosDrawing : MonoBehaviour
         startPos = transform.position;
         currentPos = grid.startPos;
 
-        for (int i = 0; i < grid.hight; i++)
+        for (int i = 0; i < grid.height; i++)
         {
             for (int j = 0; j < grid.width; j++)
             {

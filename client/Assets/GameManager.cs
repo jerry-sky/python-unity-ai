@@ -11,16 +11,43 @@ public class GameManager : MonoBehaviour
     private GameObject[,] gridArray;
     public static GameManager gm;
 
-    public List<GameObject> wolfes;
-    public List<GameObject> rabbits;
+    private ServerCommunication _serverCommunication;
 
-    private void Start()
+    public void Awake()
     {
         gm = this;
-        hight = GridGenerator.Instance.hight;
+        _serverCommunication = transform.GetComponent<ServerCommunication>();
+        _serverCommunication.simulationNamespace.onUpdate.AddListener(ResponseFromServer);
+    }
+
+    public void StartSimulation()
+    {
+        hight = GridGenerator.Instance.height;
         width = GridGenerator.Instance.width;
         gridArray = GridGenerator.Instance.gridArray;
 
+    }
+
+    public void ResponseFromServer( BoardUpdateModel data)
+    {
+        for (int i = 0; i < data.wolves.Length; i++)
+        {
+            if(data.wolves[i].alive)
+                SetObjectPosition(GridGenerator.Instance.wolvesList[i].transform, data.wolves[i].x, data.wolves[i].y);
+            else
+            {
+                GridGenerator.Instance.wolvesList[i].SetActive(false);
+            }
+        }
+        for (int i = 0; i < data.rabbits.Length; i++)
+        {
+            if(data.rabbits[i].alive)
+                SetObjectPosition(GridGenerator.Instance.rabbitsList[i].transform, data.rabbits[i].x, data.rabbits[i].y);
+            else
+            {
+                GridGenerator.Instance.rabbitsList[i].SetActive(false);
+            }
+        }
     }
 
     public Vector2 SetObjectPosition(Transform gameObject, int x, int y)

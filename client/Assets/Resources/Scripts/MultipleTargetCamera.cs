@@ -11,7 +11,7 @@ public class MultipleTargetCamera : MonoBehaviour
 
     private void Start()
     {
-        for (int i = 0; i < GridGenerator.hight; i++)
+        for (int i = 0; i < GridGenerator.height; i++)
         {
             for (int j = 0; j < GridGenerator.width; j++)
             {
