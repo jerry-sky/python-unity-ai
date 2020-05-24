@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using UnityEngine;
 using TMPro;
 
 public class SimulationNamespaceTest : MonoBehaviour
@@ -22,6 +24,15 @@ public class SimulationNamespaceTest : MonoBehaviour
         simulationNamespace.onUpdate.AddListener(BoardUpdate);
     }
 
+    IEnumerator Checking()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+            simulationNamespace.CheckUpdate();
+        }
+    }
+
     private void Connected()
     {
         output.text = "Connected to server";
@@ -43,5 +54,6 @@ public class SimulationNamespaceTest : MonoBehaviour
             rabbits_count = int.Parse(rabbitInput.text)
         };
         simulationNamespace.StartSimulation(model);
+        StartCoroutine(Checking());
     }
 }

@@ -6,8 +6,8 @@ public class CameraMovement : MonoBehaviour {
 
     Rigidbody rb;
 
-    float lookSensitivity = 50;
-    float speed = 700f;
+    [SerializeField] float lookSensitivity = 50;
+    [SerializeField] float speed = 700f;
     float acceleration = 2f;
     private float actualSpeed = 0;
 
@@ -39,8 +39,8 @@ public class CameraMovement : MonoBehaviour {
         transform.localRotation *= Quaternion.AngleAxis(rotationY, Vector3.left);
 
         rb.velocity = Vector3.zero;
-        rb.velocity += transform.forward * Input.GetAxis("Vertical") * Time.deltaTime * actualSpeed;
-        rb.velocity += transform.right * Input.GetAxis("Horizontal") * Time.deltaTime * actualSpeed;
+        rb.velocity += transform.forward * (Input.GetAxis("Vertical") * Time.deltaTime * actualSpeed);
+        rb.velocity += transform.right * (Input.GetAxis("Horizontal") * Time.deltaTime * actualSpeed);
 
     }
 }

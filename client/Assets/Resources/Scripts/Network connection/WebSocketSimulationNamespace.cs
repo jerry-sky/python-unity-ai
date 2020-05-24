@@ -23,12 +23,12 @@ public class WebSocketSimulationNamespace
 
     public void StartConnection(string serverUrl)
     {
-        socket = Socket.Connect(serverUrl + "/simulation");
+        socket = Socket.Connect(serverUrl + "/");
 
         socket.On("field_update",
             (string data) =>
             {
-                Debug.Log(data);
+                Debug.Log("field_update" + data);
                 onUpdate.Invoke(JsonUtility.FromJson<BoardUpdateModel>(data));
             });
 
@@ -39,6 +39,11 @@ public class WebSocketSimulationNamespace
     {
         string message = JsonUtility.ToJson(data);
         socket.EmitJson("start", message);
+    }
+
+    public void CheckUpdate()
+    {
+        socket.Emit("field_update");
     }
 
 }

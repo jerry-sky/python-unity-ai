@@ -10,7 +10,16 @@ public class SimulationConfirm : MonoBehaviour
     public GameObject canvas;
     public CameraMovement cameraMove;
 
-    [SerializeField] private ServerCommunication _serverCommunication;
+    [SerializeField] private ServerCommunication _serverCommunication = default;
+
+    IEnumerator CheckServer()
+    {
+        while (true)
+        {
+            _serverCommunication.simulationNamespace.CheckUpdate();
+            yield return new WaitForSeconds(1);
+        }
+    }
 
     public void ButtonClicked()
     {
@@ -25,5 +34,6 @@ public class SimulationConfirm : MonoBehaviour
         canvas.SetActive(false);
         cameraMove.enabled = true;
         GridGenerator.Instance.SettingsConfirmed(data.width,data.height,data.wolves_count,data.rabbits_count);
+        StartCoroutine(CheckServer());
     }
 }

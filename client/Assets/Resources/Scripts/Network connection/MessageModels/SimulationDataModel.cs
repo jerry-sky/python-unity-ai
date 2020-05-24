@@ -1,4 +1,4 @@
-[System.Serializable]
+﻿[System.Serializable]
 public class SimulationDataModel
 {
     public int width;
