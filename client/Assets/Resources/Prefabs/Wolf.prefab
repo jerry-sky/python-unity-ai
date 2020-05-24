@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5711473332447937925}
   - component: {fileID: 5711473332447937926}
   m_Layer: 0
-  m_Name: Rabbit
+  m_Name: Wolf
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 73c189e204c9100468c3af123e855970, type: 2}
+  - {fileID: 2100000, guid: 135c0d380468d2843adf1e3b68328e44, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -7,9 +7,13 @@ using Random = UnityEngine.Random;
 
 public class GridGenerator : MonoBehaviour
 {
-    public int width = 3;
-    public int hight = 3;
-    public GameObject Node;
+    [HideInInspector]
+    public int width, height;
+
+    public List<GameObject> wolvesList;
+    public List<GameObject> rabbitsList;
+
+    public GameObject Node, Wolf,Rabbit;
 
     [HideInInspector]
     public Vector3 startPos;
@@ -21,27 +25,33 @@ public class GridGenerator : MonoBehaviour
 
     public static GridGenerator Instance;
 
-    // Start is called before the first frame update
-    void Awake()
+    public void Awake()
     {
+        Instance = this;
+    }
+
+    // Start is called before the first frame update
+    public void SettingsConfirmed(int width, int height, int wolvesCount, int rabbitsCount)
+    {
+        this.width = width;
+        this.height = height;
         var cameraPos = transform.position;
         cameraPos.z -= 10;
         cameraPos.y += 5;
         Camera.main.transform.position = cameraPos;
-        Instance = this;
-        gridArray = new GameObject[hight,width];
-        GridArrayMaterials = new Renderer[hight,width];
+        gridArray = new GameObject[height,width];
+        GridArrayMaterials = new Renderer[height,width];
         startPos = transform.position;
         currentPos = startPos;
 
-        for (int i = 0; i < hight; i++)
+        for (int i = 0; i < height; i++)
         {
             for (int j = 0; j < width; j++)
             {
                 var x = Instantiate(Node, currentPos, Quaternion.identity,transform);
                 var pos =  x.transform.position;
                 float noiseDensity =5.1f;
-                pos.y += Mathf.PerlinNoise((float)i/hight *noiseDensity, (float)j/width * noiseDensity)*(float)width/10f;
+                pos.y += Mathf.PerlinNoise((float)i/height *noiseDensity, (float)j/width * noiseDensity)*(float)width/10f;
                 x.transform.position = pos;
                 gridArray[i, j] = x;
                 GridArrayMaterials[i,j] = x.GetComponent<Renderer>();
@@ -50,6 +60,19 @@ public class GridGenerator : MonoBehaviour
             currentPos.x = startPos.x;
             currentPos += Vector3.forward;
         }
+
+        for (int i = 0; i < wolvesCount; i++)
+        {
+            var wolf = GameObject.Instantiate(Wolf);
+            wolvesList.Add(wolf);
+        }
+        for (int i = 0; i < rabbitsCount; i++)
+        {
+            var wolf = GameObject.Instantiate(Rabbit);
+            rabbitsList.Add(Rabbit);
+        }
+
+        GameManager.gm.StartSimulation();
     }
 
     public GameObject GetGrid(int x,int y)

@@ -15,13 +15,14 @@ public class MoveObject : MonoBehaviour
     void Start()
     {
         maxX = GridGenerator.Instance.width;
-        maxY = GridGenerator.Instance.hight;
+        maxY = GridGenerator.Instance.height;
 
         currentPos.x = Random.Range(0, maxX);
         currentPos.y = Random.Range(0, maxY);
 
     }
 
+    /*
     void Update()
     {
         timer += Time.deltaTime;
@@ -39,7 +40,6 @@ public class MoveObject : MonoBehaviour
                 Random.Range((int) currentPos.y-1,(int)currentPos.y+2));
             timer = 0.0f;
         }
-
-
     }
+    */
 }
