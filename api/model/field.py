@@ -1,7 +1,10 @@
 #!/usr/bin/python3
-from entities import Wolf, Rabbit
+from model.entities import Wolf, Rabbit
 from random import randint
 from os import system
+from typing import List
+from model.event_listener import event_listener
+
 
 class Field:
     def __init__(self, width, height, n_wolves, n_rabbits):
@@ -12,6 +15,8 @@ class Field:
         self.sq = sq
         self.wolves, self.rabbits = [], []
         self.spawn_entities(n_wolves, n_rabbits)
+
+        self.__event_listeners = []
 
     def spawn_entities(self, n_wolves, n_rabbits):
         i = 0
@@ -41,15 +46,33 @@ class Field:
     def notify(self, entity, prev_pos):
         """ Function called by an entity after a move. """
         self.update_field(entity, prev_pos)
-        self.print_field()
+
+        w = []
+        for wolf in self.wolves:
+            w.append({
+                'x': wolf.pos[0],
+                'y': wolf.pos[1],
+                'alive': wolf.alive
+            })
+
+        r = []
+        for rabbit in self.rabbits:
+            r.append({
+                'x': rabbit.pos[0],
+                'y': rabbit.pos[1],
+                'alive': rabbit.alive
+            })
+
+        for listener in self.__event_listeners:
+            listener(r, w)
 
     def get_valid_moves(self, ent):
         """ Return a list of valid coordinates around an entity. """
-        return [ (i, j) for i in range(ent.pos[0] - 1, ent.pos[0] + 2)
+        return [(i, j) for i in range(ent.pos[0] - 1, ent.pos[0] + 2)
                 for j in range(ent.pos[1] - 1, ent.pos[1] + 2)
                 if 0 <= i < self.width and 0 <= j < self.height
                 and self.sq[i][j] is None
-        ]
+                ]
 
     def update_field(self, entity, prev_pos):
         self.sq[prev_pos[0]][prev_pos[1]] = None
@@ -60,10 +83,16 @@ class Field:
         system('clear')
         f = self
         for y in range(f.height):
-            row = [ '[W]' if f.sq[x][y] in f.wolves
-                    else '[R]' if f.sq[x][y] in f.rabbits
-                    else '[ ]' for x in range(f.width) ]
+            row = ['[W]' if f.sq[x][y] in f.wolves
+                   else '[R]' if f.sq[x][y] in f.rabbits
+                   else '[ ]' for x in range(f.width)]
             print(''.join(row))
+
+    def add_event_listener(self, listener: event_listener):
+        """Adds a new event listner that will be run every time a change
+        has been recorded.
+        """
+        self.__event_listeners.append(listener)
 
 
 if __name__ == '__main__':

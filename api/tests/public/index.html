@@ -12,7 +12,12 @@
 
         const socket = io('http://127.0.0.1:5000/simulation');
         socket.on('connect', function () {
-            socket.emit('start');
+            socket.emit('start', {
+                width: 10,
+                height: 10,
+                wolves_count: 5,
+                rabbits_count: 5
+            });
         });
         socket.on('update', (data) => {
             console.log(data);

@@ -3,6 +3,9 @@ import flask
 from flask import jsonify
 from flask_socketio import SocketIO, Namespace, emit
 
+from model.field import Field
+from model.start_simulation_request import start_simulation_request
+
 # flask setup
 app = flask.Flask(__name__)
 app.config['DEBUG'] = True
@@ -24,7 +27,14 @@ def more_data():
     })
 
 # socket.io event listeners
+
+
 class SimulationNamespace(Namespace):
+
+    def __init__(self, path: str):
+        super().__init__(path)
+
+        self.__simulations = []
 
     def on_connect(self):
         pass
@@ -32,12 +42,22 @@ class SimulationNamespace(Namespace):
     def on_disconnect(self):
         pass
 
-    def on_start(self, data=None):
-        if data is not None:
-            print('received:', data)
-        # testing measure – TODO: delete @Qarian
-        emit('update', {'rabbits': [{'alive': True, 'x': 3, 'y': 5}, {'alive': False, 'x': 1, 'y': 2}], 'wolfs': [
-             {'alive': True, 'x': 1, 'y': 2}, {'alive': False, 'x': 3, 'y': 4}]})
+    def on_start(self, data: start_simulation_request = None):
+        if data is None:
+            return
+
+        f = Field(data['width'], data['height'], data['wolves_count'], data['rabbits_count'])
+
+        self.__simulations.append(f)
+
+        def listener(rabbits, wolves):
+            emit('field_update', {
+                'rabbits': rabbits,
+                'wolves': wolves
+            })
+
+        f.add_event_listener(listener)
+        f.start_entities()
 
 
 socketio.on_namespace(SimulationNamespace('/simulation'))
