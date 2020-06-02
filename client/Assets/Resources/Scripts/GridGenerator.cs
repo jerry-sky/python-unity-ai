@@ -68,8 +68,8 @@ public class GridGenerator : MonoBehaviour
         }
         for (int i = 0; i < rabbitsCount; i++)
         {
-            var wolf = GameObject.Instantiate(Rabbit);
-            rabbitsList.Add(Rabbit);
+            var rabbit = GameObject.Instantiate(Rabbit);
+            rabbitsList.Add(rabbit);
         }
 
         GameManager.gm.StartSimulation();
@@ -83,12 +83,8 @@ public class GridGenerator : MonoBehaviour
 
     public void SetColorAtPosition( int x, int y)
     {
-        GridArrayMaterials[x, y].material.DOColor(Color.green, 0.5f);
-    }
-    public void RestartColorAtPosition( int x, int y)
-    {
-        GridArrayMaterials[x, y].material.DOColor(Color.gray, 10f);
-    }
+        GridArrayMaterials[x, y].material.DOColor(Color.green, 1.5f).OnComplete(()=>    GridArrayMaterials[x, y].material.DOColor(Color.grey, 5f));
 
+    }
 
 }
