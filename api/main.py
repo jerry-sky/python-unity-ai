@@ -6,7 +6,7 @@ from flask_socketio import SocketIO, Namespace, emit
 from threading import Thread
 
 from model.field import Field
-from model.start_simulation_request import start_simulation_request
+from model.start_simulation_request import StartSimulationRequest
 
 # store the current state of the simulated field
 # as this program will run only one simulation we need a single
@@ -59,7 +59,7 @@ def on_disconnect():
 
 
 @socketio.on('start')
-def on_start(data: start_simulation_request = None):
+def on_start(data: StartSimulationRequest=None):
     """Start a new simulation and store it in a global variable.
     """
     global FIELD

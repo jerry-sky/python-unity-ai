@@ -1,7 +1,7 @@
 from typing_extensions import TypedDict
 
 
-class start_simulation_request(TypedDict):
+class StartSimulationRequest(TypedDict):
     """
     Defines what kind of data the server expects when a request
     to start the simulation is issued.
