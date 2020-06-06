@@ -3,7 +3,6 @@ from model.entities import Wolf, Rabbit
 from random import randint
 from os import system
 from typing import List
-from model.event_listener import event_listener
 
 
 class Field:
@@ -15,8 +14,6 @@ class Field:
         self.sq = sq
         self.wolves, self.rabbits = [], []
         self.spawn_entities(n_wolves, n_rabbits)
-
-        self.__event_listeners = []
 
     def spawn_entities(self, n_wolves, n_rabbits):
         i = 0
@@ -68,12 +65,6 @@ class Field:
                    else '[R]' if f.sq[x][y] in f.rabbits
                    else '[ ]' for x in range(f.width)]
             print(''.join(row))
-
-    def add_event_listener(self, listener: event_listener):
-        """Adds a new event listner that will be run every time a change
-        has been recorded.
-        """
-        self.__event_listeners.append(listener)
 
 
 if __name__ == '__main__':

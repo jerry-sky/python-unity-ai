@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import flask
 from flask import jsonify
-from flask_socketio import SocketIO, Namespace, emit
+from flask_socketio import SocketIO, emit
 
 from threading import Thread
 
