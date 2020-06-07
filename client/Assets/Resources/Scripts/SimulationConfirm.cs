@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+
 public class SimulationConfirm : MonoBehaviour
 {
     public TMP_InputField wolvesTXT,rabbitsTXT,heightTXT,widthTXT;
     public GameObject canvas;
     public CameraMovement cameraMove;
+
+    [SerializeField] private float serverUpdateInterval = 1.0f;
 
     [SerializeField] private ServerCommunication _serverCommunication = default;
 
@@ -17,7 +20,7 @@ public class SimulationConfirm : MonoBehaviour
         while (true)
         {
             _serverCommunication.simulationNamespace.CheckUpdate();
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(serverUpdateInterval);
         }
     }
 
