@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from entities import Wolf, Rabbit  # For some reason model.entities
+from model.entities import Wolf, Rabbit  # For some reason model.entities
 from random import randint
 from os import system
 from typing import List
@@ -82,7 +82,7 @@ class Field:
 
 if __name__ == '__main__':
     # example program showing how this class can be used
-    f = Field(5, 5, 2, 23)
+    f = Field(10, 10, 3, 20)
     f.start_entities()
     while True:
         f.print_field()
