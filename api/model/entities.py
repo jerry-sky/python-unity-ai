@@ -4,6 +4,8 @@ from time import sleep
 import threading
 from copy import copy
 
+move_delay = 0.5 + random()
+
 class Entity(threading.Thread):
     def __init__(self, field, x, y):
         """ Place the entity on the given coordinates. """
@@ -24,8 +26,8 @@ class Entity(threading.Thread):
         prev_pos = copy(self.pos)
         self.random_move()
         self.field.notify(self, prev_pos)
-        sleep(0.5 + random())
-    
+        sleep(move_delay)
+
     def random_move(self):
         """ Move randomly. """
         valid_positions = self.field.get_valid_moves(self)
@@ -37,13 +39,24 @@ class Wolf(Entity):
     def __init__(self, field, x, y):
         super().__init__(field, x, y)
 
+    def move(self):
+        """ Attempt to chase the nearest rabbit (not yet implemented). """
+        prev_pos = copy(self.pos)
+        self.random_move()
+        self.field.notify(self, prev_pos)
+        caught_rabbit = [r for r in self.field.rabbits if r.pos == self.pos]
+        if caught_rabbit != []:
+            # Eat the caught rabbit.
+            caught_rabbit[0].alive = False
+        sleep(move_delay)
+
 
 class Rabbit(Entity):
     def __init__(self, field, x, y):
         super().__init__(field, x, y)
-    
+
     def run(self):
         super().run()
-        # Po zostaniu zjedzonym usun sie z listy zwierzat.
+        # Delete after being attacked by a wolf.
         self.field.rabbits.remove(self)
-        self.join()
+        exit()

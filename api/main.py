@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 import flask
 from flask import jsonify
-from flask_socketio import SocketIO, Namespace, emit
+from flask_socketio import SocketIO, emit
 
 from threading import Thread
-from time import sleep
 
 from model.field import Field
-from model.start_simulation_request import start_simulation_request
+from model.start_simulation_request import StartSimulationRequest
 
+# store the current state of the simulated field
+# as this program will run only one simulation we need a single
+# variable to store this simulation data
 FIELD = None
 
 # flask setup
@@ -20,7 +22,8 @@ socketio = SocketIO(app, cors_allowed_origins='*',
                     logger=True, engineio_logger=True)
 
 
-# standard flask routes
+# Basic testing flask HTTP routes.
+
 @app.route('/', methods=['GET'])
 def root():
     return '<i>it</i> <b>works!</b>'
@@ -32,9 +35,15 @@ def more_data():
         'more': 'data'
     })
 
+# A direct connection between this server that runs the logic of
+# the simulation and the client. This communication channel is defined
+# by `socket.io`.
+
 
 @socketio.on('connect')
 def on_connect():
+    """Wipe out the simulation on a new connection.
+    """
     print('CONNECT')
     global FIELD
     FIELD = None
@@ -42,26 +51,38 @@ def on_connect():
 
 @socketio.on('disconnect')
 def on_disconnect():
+    """Wipe out the simulation on disconnect.
+    """
+    print('DISCONNECT')
     global FIELD
     FIELD = None
-    print('DISCONNECT')
 
 
 @socketio.on('start')
-def on_start(data: start_simulation_request = None):
+def on_start(data: StartSimulationRequest=None):
+    """Start a new simulation and store it in a global variable.
+    """
     global FIELD
+
     if data is None:
         return
 
+    # create a new field for the simulation
     FIELD = Field(data['width'], data['height'],
                   data['wolves_count'], data['rabbits_count'])
 
+    # let the entities move
     FIELD.start_entities()
 
 
 @socketio.on('field_update')
 def on_field_update(data=None):
+    """Send requested field state.
+    """
+
     f = FIELD
+
+    # collect the data
     w = []
     for wolf in f.wolves:
         w.append({
@@ -77,6 +98,8 @@ def on_field_update(data=None):
             'y': rabbit.pos[1],
             'alive': rabbit.alive
         })
+
+    # send the data
     socketio.emit('field_update', {
         'rabbits': r,
         'wolves': w
