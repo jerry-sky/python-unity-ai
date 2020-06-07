@@ -22,8 +22,7 @@ socketio = SocketIO(app, cors_allowed_origins='*',
                     logger=True, engineio_logger=True)
 
 
-# Basic testing flask HTTP routes.
-
+# Basic flask HTTP routes for testing purposes.
 @app.route('/', methods=['GET'])
 def root():
     return '<i>it</i> <b>works!</b>'
@@ -38,7 +37,6 @@ def more_data():
 # A direct connection between this server that runs the logic of
 # the simulation and the client. This communication channel is defined
 # by `socket.io`.
-
 
 @socketio.on('connect')
 def on_connect():

@@ -4,9 +4,13 @@ from time import sleep
 import threading
 from copy import copy
 
-move_delay = 0.5 + random()
+MOVE_DELAY = 0.5 + random()
+
 
 class Entity(threading.Thread):
+    """Represents a single entity being simulated.
+    """
+
     def __init__(self, field, x, y):
         """ Place the entity on the given coordinates. """
         threading.Thread.__init__(self)
@@ -26,7 +30,7 @@ class Entity(threading.Thread):
         prev_pos = copy(self.pos)
         self.random_move()
         self.field.notify(self, prev_pos)
-        sleep(move_delay)
+        sleep(MOVE_DELAY)
 
     def random_move(self):
         """ Move randomly. """
@@ -36,6 +40,8 @@ class Entity(threading.Thread):
 
 
 class Wolf(Entity):
+    """Represents a predator in the simulation.
+    """
     def __init__(self, field, x, y):
         super().__init__(field, x, y)
 
@@ -48,10 +54,12 @@ class Wolf(Entity):
         if caught_rabbit != []:
             # Eat the caught rabbit.
             caught_rabbit[0].alive = False
-        sleep(move_delay)
+        sleep(MOVE_DELAY)
 
 
 class Rabbit(Entity):
+    """Represents a prey in the simulation.
+    """
     def __init__(self, field, x, y):
         super().__init__(field, x, y)
 

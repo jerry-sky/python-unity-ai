@@ -7,12 +7,17 @@ from time import sleep  # For testing purposes.
 
 # A moving entity will consider squares occupied by
 # classes in its list as valid move targets.
-valid_for = {
+VALID_FOR = {
     Rabbit: [],
     Wolf: [Rabbit]
 }
 
+
 class Field:
+    """
+    Class used for storing and performing simulation related actions.
+    """
+
     def __init__(self, width, height, n_wolves, n_rabbits):
         self.width, self.height = width, height
         sq = []
@@ -57,7 +62,7 @@ class Field:
                 for j in range(ent.pos[1] - 1, ent.pos[1] + 2)
                 if 0 <= i < self.width and 0 <= j < self.height
                 and (self.sq[i][j] is None
-                or self.sq[i][j].__class__ in valid_for[ent.__class__])
+                     or self.sq[i][j].__class__ in VALID_FOR[ent.__class__])
                 ]
 
     def update_field(self, entity, prev_pos):
@@ -76,6 +81,7 @@ class Field:
 
 
 if __name__ == '__main__':
+    # example program showing how this class can be used
     f = Field(5, 5, 2, 23)
     f.start_entities()
     while True:
