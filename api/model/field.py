@@ -1,9 +1,16 @@
 #!/usr/bin/python3
-from model.entities import Wolf, Rabbit
+from entities import Wolf, Rabbit  # For some reason model.entities
 from random import randint
 from os import system
 from typing import List
+from time import sleep  # For testing purposes.
 
+# A moving entity will consider squares occupied by
+# classes in its list as valid move targets.
+valid_for = {
+    Rabbit: [],
+    Wolf: [Rabbit]
+}
 
 class Field:
     def __init__(self, width, height, n_wolves, n_rabbits):
@@ -49,7 +56,8 @@ class Field:
         return [(i, j) for i in range(ent.pos[0] - 1, ent.pos[0] + 2)
                 for j in range(ent.pos[1] - 1, ent.pos[1] + 2)
                 if 0 <= i < self.width and 0 <= j < self.height
-                and self.sq[i][j] is None
+                and (self.sq[i][j] is None
+                or self.sq[i][j].__class__ in valid_for[ent.__class__])
                 ]
 
     def update_field(self, entity, prev_pos):
@@ -68,5 +76,10 @@ class Field:
 
 
 if __name__ == '__main__':
-    f = Field(10, 12, 10, 40)
+    f = Field(5, 5, 2, 23)
     f.start_entities()
+    while True:
+        f.print_field()
+        print(len(f.rabbits))
+        print(len(f.wolves))
+        sleep(0.5)
